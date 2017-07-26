@@ -30,6 +30,7 @@
 #include "msm-pcm-routing.h"
 #include "../codecs/wcd9310.h"
 #include <mach/pm8921-mic_bias.h>
+#include <mach/board-semc_blue.h>
 
 /* 8960 machine driver */
 
