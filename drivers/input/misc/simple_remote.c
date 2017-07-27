@@ -926,7 +926,8 @@ static int simple_remote_probe(struct platform_device *pdev)
 
 	jack->indev_appkey->name = SIMPLE_REMOTE_APPKEY_NAME;
 	jack->indev_appkey->evbit[0] = BIT_MASK(EV_KEY);
-	jack->indev_appkey->evbit[1] = BIT_MASK(EV_SW);
+	set_bit(EV_SW, jack->indev_appkey->evbit);
+//	jack->indev_appkey->evbit[1] = BIT_MASK(EV_SW);
 	jack->indev_appkey->keybit[BIT_WORD(BTN_MISC)] |=
 		BIT_MASK(SIMPLE_REMOTE_APPKEY);
 	jack->indev_appkey->swbit[BIT_WORD(SW_HEADPHONE_INSERT)] |=
