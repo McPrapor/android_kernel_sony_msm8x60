@@ -535,12 +535,21 @@ static void simple_remote_report_accessory_type(
 			break;
 		case DEVICE_HEADPHONE:
 			dev_dbg(jack->dev, "DEVICE_HEADPHONE\n");
+                        input_report_switch(jack->indev_appkey, SW_HEADPHONE_INSERT, 1);
+                        input_report_switch(jack->indev_appkey, SW_MICROPHONE_INSERT, 0);
+                        input_sync(jack->indev_appkey);
 			break;
 		case NO_DEVICE:
 			dev_dbg(jack->dev, "NO_DEVICE\n");
+                        input_report_switch(jack->indev_appkey, SW_HEADPHONE_INSERT, 0);
+                        input_report_switch(jack->indev_appkey, SW_MICROPHONE_INSERT, 0);
+                        input_sync(jack->indev_appkey);
 			break;
 		case DEVICE_HEADSET:
 			dev_dbg(jack->dev, "DEVICE_HEADSET\n");
+                        input_report_switch(jack->indev_appkey, SW_HEADPHONE_INSERT, 1);
+                        input_report_switch(jack->indev_appkey, SW_MICROPHONE_INSERT, 1);
+                        input_sync(jack->indev_appkey);				
 			msleep(100);
 			jack->interface->enable_mic_bias(1);
 			jack->interface->register_hssd_button_interrupt(
@@ -917,8 +926,13 @@ static int simple_remote_probe(struct platform_device *pdev)
 
 	jack->indev_appkey->name = SIMPLE_REMOTE_APPKEY_NAME;
 	jack->indev_appkey->evbit[0] = BIT_MASK(EV_KEY);
+	jack->indev_appkey->evbit[1] = BIT_MASK(EV_SW);
 	jack->indev_appkey->keybit[BIT_WORD(BTN_MISC)] |=
 		BIT_MASK(SIMPLE_REMOTE_APPKEY);
+	jack->indev_appkey->swbit[BIT_WORD(SW_HEADPHONE_INSERT)] |=
+		BIT_MASK(SW_HEADPHONE_INSERT);
+	jack->indev_appkey->swbit[BIT_WORD(SW_MICROPHONE_INSERT)] |=
+		BIT_MASK(SW_MICROPHONE_INSERT);
 	jack->indev_appkey->open = simple_remote_open;
 	jack->indev_appkey->close = simple_remote_close;
 
